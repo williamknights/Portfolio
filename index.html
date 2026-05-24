@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>William Knights — Writing Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --dark:    #111214;
+      --card-bg: #181a1e;
+      --border:  #2a2d33;
+      --gold:    #f5a623;
+      --gold-dim:#c4841a;
+      --gold-glow: rgba(245,166,35,0.22);
+      --white:   #ffffff;
+      --offwhite:#e8eaf0;
+      --muted:   #8a8f9e;
+      --radius:  6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--offwhite);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar:hover { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a855f7;
+      border-radius: 3px;
+      box-shadow:
+        0 0 6px rgba(168,85,247,0.9),
+        0 0 16px rgba(168,85,247,0.55),
+        0 0 30px rgba(168,85,247,0.25);
+    }
+
+    /* ── Nav ────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    nav .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    nav .logo span { color: var(--gold); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      font-size: 0.80rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    nav ul a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -4px;
+      width: 0; height: 2px;
+      background: #a855f7;
+      transition: width 0.25s ease;
+    }
+
+    nav ul a:hover { color: var(--white); }
+    nav ul a:hover::after { width: 100%; }
+
+    nav .nav-cta {
+      font-size: 0.80rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--gold);
+      padding: 0.45rem 1.2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    nav .nav-cta:hover { background: #ffc242; transform: translateY(-1px); }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 2rem 4rem;
+      background:
+        linear-gradient(
+          rgba(10,10,10,0.72) 0%,
+          rgba(10,10,10,0.60) 50%,
+          rgba(10,10,10,0.78) 100%
+        ),
+        url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1600&q=80')
+        center / cover no-repeat fixed;
+    }
+
+    /* Animated grid background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: grid-drift 20s linear infinite;
+    }
+
+    @keyframes grid-drift {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(60px); }
+    }
+
+    /* Gold radial glow behind text */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 30%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(245,166,35,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero h1 .gold-line {
+      display: block;
+      color: var(--gold);
+      /* subtle text glow */
+      text-shadow: 0 0 40px rgba(245,166,35,0.45);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 1.4rem auto 2.5rem;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #ffc242;
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px rgba(245,166,35,0.45);
+    }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--offwhite);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.70rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.6;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── Section Shell ──────────────────────────────────────── */
+    section { padding: 6rem 2rem; }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--gold);
+    }
+
+    h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    h2 span { color: var(--gold); }
+
+    .section-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 3rem;
+      box-shadow: 0 0 8px rgba(245,166,35,0.5);
+    }
+
+    /* ── About ──────────────────────────────────────────────── */
+    #about { background: var(--dark); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+      line-height: 1.9;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .stat-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      padding: 1.1rem 1.3rem;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+
+    .stat-card:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .stat-card:last-child  { border-radius: 0 0 var(--radius) var(--radius); }
+
+    .stat-card:hover {
+      background: #1e2028;
+      border-color: var(--gold);
+      box-shadow: inset 0 0 20px rgba(245,166,35,0.04);
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #a855f7;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-value {
+      font-size: 0.92rem;
+      color: var(--offwhite);
+    }
+
+    /* ── Projects ───────────────────────────────────────────── */
+    #projects { background: var(--black); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    /* Gold corner accent */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 40px; height: 3px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .project-card:hover::before { width: 100%; }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold);
+      box-shadow: 0 0 30px var(--gold-glow), 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .project-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #a855f7;
+      background: rgba(168,85,247,0.10);
+      border: 1px solid rgba(168,85,247,0.25);
+      border-radius: 3px;
+      padding: 0.2rem 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 0.7rem;
+    }
+
+    .project-card p {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-link {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: gap 0.2s;
+    }
+
+    .project-link:hover { gap: 0.8rem; }
+
+    .placeholder-note {
+      margin-top: 2.5rem;
+      padding: 1rem 1.4rem;
+      border: 1px dashed rgba(245,166,35,0.35);
+      border-radius: var(--radius);
+      background: rgba(245,166,35,0.04);
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ── Skills ─────────────────────────────────────────────── */
+    #skills { background: var(--dark); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-group {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .skill-group:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    .skill-group h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a855f7;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-group ul { list-style: none; }
+
+    .skill-group ul li {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--muted);
+      padding: 0.35rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .skill-group ul li::before {
+      content: '';
+      display: block;
+      width: 5px; height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .skill-group:hover ul li { color: var(--offwhite); }
+
+    /* ── Contact ─────────────────────────────────────────────── */
+    #contact {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          rgba(10,10,10,0.72) 0%,
+          rgba(10,10,10,0.60) 50%,
+          rgba(10,10,10,0.78) 100%
+        ),
+        url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1600&q=80')
+        center / cover no-repeat fixed;
+    }
+
+    #contact::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(245,166,35,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    #contact .container { position: relative; z-index: 1; }
+
+    #contact h2 { margin-bottom: 1rem; }
+
+    #contact .section-divider { margin-left: auto; margin-right: auto; }
+
+    #contact p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: #060606;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: #444;
+      padding: 1.6rem 2rem;
+    }
+
+    footer span { color: var(--gold); }
+
+    /* ── Fade-in on scroll ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      nav { padding: 0 1.2rem; }
+      nav ul { gap: 1.2rem; }
+      .nav-cta { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#hero" class="logo">William <span>Knights</span></a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Writing Portfolio</p>
+      <h1>
+        <span class="gold-line">Purposeful Documentation.</span>
+      </h1>
+      <p class="hero-sub">
+        Technical writer and communications professional with experience in
+        insurance, documentation, and education. Based in San Antonio, TX.
+      </p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label">Background</p>
+      <h2>About <span>Me</span></h2>
+      <div class="section-divider"></div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            My professional background has consistently required translating
+            process-heavy information into clear, actionable writing that helps
+            real people do their jobs more confidently and efficiently.
+          </p>
+          <p>
+            Experienced in creating onboarding and service center documentation
+            for office staff navigating software tools and internal systems. I
+            have written guides, standard operating procedures, and industry
+            reference materials covering various products and terminology to turn
+            unfamiliar systems into something any new hire could follow on day
+            one. I have learned how to study a tool, understand how a user
+            interacts with it, and write documentation that closes the gap
+            between the two.
+          </p>
+          <p>
+            I also spent time as a high school English teacher, where I learned
+            to meet students where they are, breaking down dense or unfamiliar
+            material into something clear and usable regardless of the audience's
+            starting point. That instinct for the student carries directly into
+            every document I write.
+          </p>
+          <p>
+            My writing is rooted in precision, empathy for the reader, and a
+            deep respect for clarity. This portfolio showcases documentation and
+            writing projects that reflect those values.
+          </p>
+        </div>
+        <div class="stat-cards reveal">
+          <div class="stat-card">
+            <div class="stat-label">Current Role</div>
+            <div class="stat-value">Client Service Specialist: Lender-Placed Operations — SWBC</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Education</div>
+            <div class="stat-value">B.A. in English: Literature</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Previous Experience</div>
+            <div class="stat-value">Technical Writer · English Teacher (Grades 10–11)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Location</div>
+            <div class="stat-value">San Antonio, Texas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label">Work Samples</p>
+      <h2>My <span>Projects</span></h2>
+      <div class="section-divider"></div>
+      <div class="projects-grid">
+
+        <div class="project-card reveal">
+          <span class="project-tag">Technical Writing</span>
+          <h3>Coming Soon</h3>
+          <p>
+            A brief look into a variety of training guides that have proven successful for target-user implementation.
+          </p>
+          <a href="#" class="project-link">View Document &#8594;</a>
+        </div>
+
+        <div class="project-card reveal">
+          <span class="project-tag">Process Documentation</span>
+          <h3>Coming Soon</h3>
+          <p>
+            When the team asks, "How do we ensure this task is always performed correctly and consistently?"
+          </p>
+          <a href="#" class="project-link">View Document &#8594;</a>
+        </div>
+
+        <div class="project-card reveal">
+          <span class="project-tag">Communications</span>
+          <h3>Coming Soon</h3>
+          <p>
+            Creating a centralized training system to improve knowledge retention.
+          </p>
+          <a href="#" class="project-link">View Document &#8594;</a>
+        </div>
+
+      </div>
+      <p class="placeholder-note reveal">
+        ✏️ These are placeholder cards — you'll replace them with your real writing samples when you're ready. Just let me know and I'll help you add them.
+      </p>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label">Capabilities</p>
+      <h2>My <span>Skills</span></h2>
+      <div class="section-divider"></div>
+      <div class="skills-grid">
+        <div class="skill-group reveal">
+          <h4>Writing</h4>
+          <ul>
+            <li>Technical Documentation</li>
+            <li>Process Guides</li>
+            <li>Instructional Writing</li>
+            <li>Professional Correspondence</li>
+            <li>Editing &amp; Proofreading</li>
+          </ul>
+        </div>
+        <div class="skill-group reveal">
+          <h4>Industry Knowledge</h4>
+          <ul>
+            <li>General Insurance (Auto &amp; Home)</li>
+            <li>Lender Operations</li>
+            <li>Permit &amp; Compliance Docs</li>
+            <li>Customer Service</li>
+            <li>Financial Institution Support</li>
+          </ul>
+        </div>
+        <div class="skill-group reveal">
+          <h4>Tools</h4>
+          <ul>
+            <li>Microsoft Word &amp; Excel</li>
+            <li>Google Docs &amp; Sheets</li>
+            <li>Outlook &amp; Gmail</li>
+            <li>Google Drive</li>
+            <li>Trainual</li>
+          </ul>
+        </div>
+        <div class="skill-group reveal">
+          <h4>Soft Skills</h4>
+          <ul>
+            <li>Audience Awareness</li>
+            <li>Cross-functional Communication</li>
+            <li>Attention to Detail</li>
+            <li>Curriculum Design</li>
+            <li>Project Deadline Management</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label" style="justify-content:center;">Get in Touch</p>
+      <h2>Let's <span>Connect</span></h2>
+      <div class="section-divider"></div>
+      <p>
+        I'm open to freelance writing projects, technical writing roles, and
+        documentation opportunities. Feel free to reach out.
+      </p>
+      <a href="mailto:sirwilliamknights11@gmail.com" class="btn-primary">
+        sirwilliamknights11@gmail.com
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 <span>William Knights</span> &mdash; All rights reserved.</p>
+  </footer>
+
+  <!-- Scroll reveal script -->
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
